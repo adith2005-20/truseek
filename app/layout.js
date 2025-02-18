@@ -24,8 +24,8 @@ export default function Layout({ children }) {
           {/* Provide the selected model and updater */}
           <ModelContext.Provider value={{ selectedModel, setSelectedModel }}>
             <AppSidebar />
-            <main className="bg-background text-foreground overflow-y-hidden">
-              <SidebarTrigger className="scale-125 m-2 bg-sidebar shadow" />
+            <main>
+              
               {children}
             </main>
           </ModelContext.Provider>
