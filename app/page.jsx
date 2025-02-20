@@ -8,12 +8,15 @@ import axios from "axios";
 import Markdown from "react-markdown";
 import { useModelContext } from "./layout";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Page = () => {
   const [messageBox, setMessageBox] = useState([]);
   const [senderStringMessage, setSenderStringMessage] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const chatContainerRef = useRef(null);
+  const [loading, setLoading]=useState(false);
+
   const { selectedModel } = useModelContext();
   const apikey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
@@ -26,8 +29,8 @@ const Page = () => {
     let botMessage;
     try {
       console.log(selectedModel);
-      if (selectedModel === "gemini-1.5 flash") {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apikey}`;
+      if (selectedModel.slice(0,6) === "gemini") {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apikey}`;
         const res = await axios.post(
           url,
           { contents: [{ parts: [{ text: senderStringMessage }] }] },
@@ -84,18 +87,31 @@ const Page = () => {
   </button>
 
   {/* Main Content Wrapper */}
-  <div className="flex flex-col lg:ml-[1rem] w-full transition-all h-full overflow-hidden">
+  <div className="flex flex-col lg:ml-[1rem] w-full transition-all h-full overflow-hidden chatcontainer">
     {/* Chat Messages */}
     <div ref={chatContainerRef} className="overflow-y-auto p-2 space-y-4 w-full flex-1 mt-20 pb-36 h-full">
       {messageBox.length === 0 && <p className="text-center">Type to chat with TruSeek</p>}
       {messageBox.map((msg, index) => (
         <div key={index} className={`flex items-start ${msg.sender === "You" ? "flex-row-reverse" : ""}`}>
           <User className="border-primary p-2 scale-125 bg-input rounded-full mt-2" />
-          <div className={`p-2 mx-4 rounded-lg max-w-[75%] break-words ${
+          <div className={`p-2 mx-4 rounded-lg max-w-[75%] breakwords ${
               msg.sender === "You" ? "bg-primary text-primary-foreground ml-auto rounded-tr-none" : "bg-secondary text-foreground mr-auto rounded-tl-none"
             }`}
           >
-            <strong>{msg.sender}:</strong> <Markdown>{msg.text}</Markdown>
+            <strong>{msg.sender}:{"\n"}</strong> <Markdown
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                return (
+                  <code
+                    className={`${className} break-words`}
+                    {...props}
+                  >
+                    {children}
+                  </code>
+                );
+              },
+            }}
+            >{msg.text}</Markdown>
           </div>
         </div>
       ))}

@@ -3,6 +3,8 @@ import { createContext, useState, useContext } from "react"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import {Geist} from 'next/font/google'
+
+
 const geist = Geist({
   subsets: ['latin'],
   display: 'swap',
@@ -15,7 +17,7 @@ const geist = Geist({
 const ModelContext = createContext()
 
 export default function Layout({ children }) {
-  const [selectedModel, setSelectedModel] = useState("deepseek-r1:7b")
+  const [selectedModel, setSelectedModel] = useState("gemini-1.5-flash")
 
   return (
     <html className={geist.className}>

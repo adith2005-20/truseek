@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 
+.breakwords{
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+code{
+  white-space: pre-wrap;
+  word-break:break-word;
+}
+
+.chatcontainer{
+  overflow-x: hidden;
+}
 
 /* Default (Light Mode) */
 ::-webkit-scrollbar {
