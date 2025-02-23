@@ -4,7 +4,6 @@ import "./globals.css";
 import { Input } from "@/components/ui/input";
 import { Moon, Send, Sun, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import Markdown from "react-markdown";
 import { useModelContext } from "./layout";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -18,7 +17,6 @@ const Page = () => {
   const [loading, setLoading]=useState(false);
 
   const { selectedModel } = useModelContext();
-  const apikey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,14 +27,23 @@ const Page = () => {
     let botMessage;
     try {
       console.log(selectedModel);
-      if (selectedModel.slice(0,6) === "gemini") {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apikey}`;
-        const res = await axios.post(
-          url,
-          { contents: [{ parts: [{ text: senderStringMessage }] }] },
-          { headers: { "Content-Type": "application/json" } }
-        );
-        botMessage = { text: res.data.candidates?.[0]?.content?.parts?.[0]?.text || "No response", sender: "TruSeek" };
+      if (selectedModel.startsWith("gemini") || selectedModel.startsWith("gpt")) {
+        const response = await fetch("/api/chat",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: {
+                model: selectedModel,
+                text: senderStringMessage,
+              },
+            }),
+          }
+        )
+        const responseData = await response.json(); // Parse JSON response
+        botMessage = {text: responseData.text, sender: "TruSeek"}
       } else {
         const res = await axios.post("http://localhost:11434/api/generate", {
           model: selectedModel,

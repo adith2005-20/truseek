@@ -26,7 +26,8 @@ const models = [
 
 const webModels = [
   {title:"Gemini 1.5 Flash", subtext:"fast, versatile", icon:WholeWordIcon, action:"gemini-1.5-flash", url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${gemini_api}`},
-  {title:"Gemini 2.0 Flash", subtext:"smarter, newest", icon:WholeWordIcon, action:"gemini-2.0-flash", url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${gemini_api}`}
+  {title:"Gemini 2.0 Flash", subtext:"smarter, newest", icon:WholeWordIcon, action:"gemini-2.0-flash", url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${gemini_api}`},
+  {title:"GPT-4o Mini", subtext:"paid plan", icon:WholeWordIcon, action:"gpt-4o-mini"}
 ]
 
 export function AppSidebar() {
